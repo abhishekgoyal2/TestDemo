@@ -1,0 +1,76 @@
+plugins {
+    id 'java'
+}
+test {
+    useJUnitPlatform()
+}
+
+group 'org.example'
+group 'com.cucumber-allure-gradle-integration'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+ testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    implementation group: 'org.json', name: 'json', version: '20180813'
+
+    //Serenity bdd ---
+
+    testImplementation "net.serenity-bdd:serenity-core:2.0.64",
+            "net.serenity-bdd:serenity-cucumber4:1.0.19",
+            "io.cucumber:cucumber-core:4.2.0",
+            "io.cucumber:cucumber-junit:4.2.0"
+    //Serenity bdd ---
+
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    testImplementation 'io.rest-assured:rest-assured:4.5.1'
+    testImplementation 'io.rest-assured:xml-path:4.5.1'
+    testImplementation 'io.rest-assured:json-path:4.5.1'
+    testImplementation 'io.rest-assured:json-schema-validator:4.5.1'
+    testImplementation 'io.rest-assured:spring-web-test-client:4.5.1'
+testImplementation 'junit:junit:4.13.2'
+    implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.13.9'
+    testImplementation group: 'io.cucumber', name: 'cucumber-testng', version: '7.2.3'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.4.0'
+    implementation group: 'io.qameta.allure', name: 'allure-rest-assured', version: '2.13.9'
+    implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.6'
+    testImplementation 'io.cucumber:cucumber-java:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
+    implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '5.0.3'
+    implementation group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
+
+
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumberCli() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:target/cucumber-report.html',
+                    '--glue', 'com.bh.assign.stepdef',
+                    'src/test/resources']
+        }
+    }
+}
+
+
+
+
