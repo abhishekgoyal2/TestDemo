@@ -74,6 +74,21 @@ public class APICurdOp {
         return uri;
     }
 
+    public static String getURI(String filepath,String uri) {
+        {
+            Wini ini = null;
+            try {
+                ini = new Wini(new File(filepath));
+                uri = ini.get("apiConstant",uri);
+                System.out.print("URI : " + uri + "\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return uri;
+    }
+
     @AfterMethod(alwaysRun = true)
     public void afterMethodSetup(ITestResult result) throws InterruptedException {
         // Setting Test Status to Extent
