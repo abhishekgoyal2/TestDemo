@@ -1,4 +1,4 @@
-package com.bh.assign;
+package com.bh.assign.base.ui;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,16 +11,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
-public class TestImplementation {
+public class UITestBase {
 
     public static WebDriver driver;
 
     @BeforeClass
     public static void setupWebdriverChromeDriver() {
         WebDriverManager.chromedriver().setup();
-
         driver = new ChromeDriver();
-
     }
 
     @AfterTest
@@ -55,7 +53,6 @@ public class TestImplementation {
     @Test
     public void page_Handling_iFrame() throws InterruptedException {
         // Click on link to open iFrame
-
             driver.get("http://omayo.blogspot.com/");
             Thread.sleep(1000);
             driver.manage().window().maximize();

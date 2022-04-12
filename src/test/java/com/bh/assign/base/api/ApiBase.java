@@ -13,40 +13,34 @@ import java.util.logging.Logger;
 
 import static io.restassured.RestAssured.given;
 
-public class APICurdOp {
+public class ApiBase {
 
     public static Response PostCallValidateStatus(String uri, JSONObject jsonBody){
-      Response response= (Response) given().relaxedHTTPSValidation().contentType("application/json").body(jsonBody.toString()).post(uri);
-        return response;
+        return given().relaxedHTTPSValidation().contentType("application/json").body(jsonBody.toString()).post(uri);
     }
 
     public static Response PostCallValidateStatus(String uri, JSONObject jsonBody,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(jsonBody.toString()).post(uri);
-        return response;
+        return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(jsonBody.toString()).post(uri);
     }
 
     public static Response PostCallValidateStatus(String uri, File Jsonfile,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(Jsonfile).post(uri);
-        return response;
+        return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(Jsonfile).post(uri);
     }
 
     public static Response PutCallValidateStatus(String uri, File Jsonfile,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(Jsonfile).put(uri);
-        return response;
+        return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(Jsonfile).put(uri);
     }
 
     public static Response getCallValidateStatus(String uri,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").get(uri);
-        return response;
+        return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").get(uri);
     }
 
     public static Response deleteCallValidateStatus(String uri,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").delete(uri);
-        return response;
+        return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").delete(uri);
     }
 
     public static Response deleteCallValidateStatusAl(String uri,String authToken){
-        Response response= (Response) given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").delete(uri);
+        Response response= given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").delete(uri);
        given().filter(new AllureRestAssured());
         return response;
     }
@@ -61,7 +55,7 @@ public class APICurdOp {
     public static String getURI() {
         String uri = null;
         {
-            Wini ini = null;
+            Wini ini;
             try {
                 ini = new Wini(new File("src\\test\\resources\\util\\IniFile\\configuration.ini"));
                 uri = ini.get("apiConstant", "poke_man_URI");
@@ -76,7 +70,7 @@ public class APICurdOp {
 
     public static String getURI(String filepath,String uri) {
         {
-            Wini ini = null;
+            Wini ini;
             try {
                 ini = new Wini(new File(filepath));
                 uri = ini.get("apiConstant",uri);
@@ -90,7 +84,7 @@ public class APICurdOp {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void afterMethodSetup(ITestResult result) throws InterruptedException {
+    public void afterMethodSetup(ITestResult result) {
         // Setting Test Status to Extent
         switch(result.getStatus()) {
             case ITestResult.SUCCESS:
