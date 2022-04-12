@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 import static io.restassured.RestAssured.given;
 
-public class APICurdOp {
+public class ApiBase {
 
     public static Response PostCallValidateStatus(String uri, JSONObject jsonBody){
         return given().relaxedHTTPSValidation().contentType("application/json").body(jsonBody.toString()).post(uri);
