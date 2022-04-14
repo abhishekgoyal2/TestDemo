@@ -20,8 +20,3 @@ Feature:Demo abc billing rest api test validation
 	Scenario: Send API requests of  type Post to server
 #	Given user hit the uri apiEndpoint
 		When User provide header details and make Post call for grant access token
-
-	@Scenario_postAPI
-	Scenario: Send API requests of  type Post to server with ini file
-#	Given user hit the uri apiEndpoint
-		When User provide header details and make Post call for grant access token with ini

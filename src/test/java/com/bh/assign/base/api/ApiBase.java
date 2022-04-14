@@ -6,7 +6,6 @@ import org.ini4j.Wini;
 import org.json.JSONObject;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -14,10 +13,6 @@ import java.util.logging.Logger;
 import static io.restassured.RestAssured.given;
 
 public class ApiBase {
-
-    public static Response PostCallValidateStatus(String uri, JSONObject jsonBody){
-        return given().relaxedHTTPSValidation().contentType("application/json").body(jsonBody.toString()).post(uri);
-    }
 
     public static Response PostCallValidateStatus(String uri, JSONObject jsonBody,String authToken){
         return given().relaxedHTTPSValidation().header("Authorization",authToken).contentType("application/json").body(jsonBody.toString()).post(uri);
@@ -59,11 +54,9 @@ public class ApiBase {
             try {
                 ini = new Wini(new File("src\\test\\resources\\util\\IniFile\\configuration.ini"));
                 uri = ini.get("apiConstant", "poke_man_URI");
-//                System.out.print("URI : " + uri + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return uri;
     }
