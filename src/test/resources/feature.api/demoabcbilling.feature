@@ -1,3 +1,4 @@
+@BillingDemo
 Feature:Demo abc billing rest api test validation
 
 #######################################
@@ -20,3 +21,16 @@ Feature:Demo abc billing rest api test validation
 	Scenario: Send API requests of  type Post to server
 #	Given user hit the uri apiEndpoint
 		When User provide header details and make Post call for grant access token
+		When User provide header details and make get call to retrieve all with access provided
+
+	@Scenario_get_PaymentMethod
+	Scenario: Send API requests of  type get for Payment method to server
+#	Given user hit the uri apiEndpoint
+		When User provide header details and make Post call for grant access token
+		When User provide header details and make get call to Payment method with access provided
+
+	@Scenario_post_PaymentMethod
+	Scenario: Send API requests of  type Post for Payment method to server
+#	Given user hit the uri apiEndpoint
+		When User provide header details and make Post call for grant access token
+		When User provide header details and make Post call to Payment method with access provided
