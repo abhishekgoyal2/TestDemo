@@ -93,6 +93,7 @@ public class BillingDemoAPIStepDef {
         requestBody.put("type",paymentmethod.setType("CREDIT_CARD"));
         requestBody.put("subType",paymentmethod.setType("CREDIT"));
         requestBody.put("brand",paymentmethod.setType("AMEX"));
+        requestBody.put("accountHolderName",paymentmethod.setType("payment method name"));
         System.out.println("getting request json " +requestBody);
         String authToken=APIConstants.BEARER+response.then().extract().path("access_token").toString();
         System.out.println("getting access token " +authToken);
