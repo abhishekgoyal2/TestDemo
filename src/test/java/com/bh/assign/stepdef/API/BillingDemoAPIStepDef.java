@@ -2,12 +2,16 @@ package com.bh.assign.stepdef.API;
 
 import com.bh.assign.base.api.ApiBase;
 import com.bh.assign.helper.APIConstants;
+import com.bh.assign.model.Paymentmethod;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
@@ -17,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class BillingDemoAPIStepDef {
 
     Response response;
+    Paymentmethod paymentmethod =new Paymentmethod();
 
 //    @Given("user hit the {string} and {string} apiEndpoint with header details and make Post call")
 //    public void user_hit_the_and_api_endpoint_with_header_details_and_make_post_call(String uri, String jsonFilepath) {
@@ -75,4 +80,25 @@ public class BillingDemoAPIStepDef {
         }
     }
 
-}
+    @When("User provide header details and make Post call to Payment method with access provided and mandatory data")
+    public void user_provide_header_details_and_make_post_call_to_payment_method_with_access_provided_and_mandatory_data(io.cucumber.datatable.DataTable dataTable) {
+        // Write code here that turns the phrase above into concrete actions
+        // For automatic transformation, change DataTable to one of
+        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
+        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
+        // Double, Byte, Short, Long, BigInteger or BigDecimal.
+        //
+        // For other transformations you can register a DataTableType.
+        JSONObject requestBody =new JSONObject();
+        requestBody.put("type",paymentmethod.setType("CREDIT_CARD"));
+        requestBody.put("subType",paymentmethod.setType("CREDIT"));
+        requestBody.put("brand",paymentmethod.setType("AMEX"));
+        System.out.println("getting request json " +requestBody);
+        String authToken=APIConstants.BEARER+response.then().extract().path("access_token").toString();
+        System.out.println("getting access token " +authToken);
+        response = ApiBase.PostCallValidateStatus("https://qa.30preprod.com/api/abcblg/payment-method",requestBody,authToken);
+        System.out.println("getting response from -- > " + response.body().prettyPrint());
+
+    }
+
+    }
