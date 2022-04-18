@@ -14,9 +14,14 @@ Feature:Demo abc billing rest api test validation
 		And Response matches the schema json "<expectedField1>"  with "<expectedValue1>" and "<expectedField2>"  with "<expectedValue2>" in response
 		Examples:
 			| uri |jsonFilepath|expectedStatusCode |expectedKey |expectedField1 |expectedValue1 |expectedField2 |expectedValue2 |
-			|https://qa.30preprod.com/api/token?grant_type=client_credentials|src/test/resources/util/Jsonfile/billinGrantaccess.json|200 |access_token |token_type | bearer |expires_in |899  |
+			|grantAccessUrl|src/test/resources/util/Jsonfile/billinGrantaccess.json|200 |access_token |token_type | bearer |expires_in |899  |
 
 	@Scenario_postAPI
 	Scenario: Send API requests of  type Post to server
 #	Given user hit the uri apiEndpoint
 		When User provide header details and make Post call for grant access token
+
+	@Scenario_postAPI
+	Scenario: Send API requests of  type Post to server with ini file
+#	Given user hit the uri apiEndpoint
+		When User provide header details and make Post call for grant access token with ini

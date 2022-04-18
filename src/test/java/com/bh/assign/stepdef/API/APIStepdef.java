@@ -1,14 +1,12 @@
 package com.bh.assign.stepdef.API;
 
-import com.bh.assign.base.api.APICurdOp;
-import com.bh.assign.endpoint.APIEndPoints;
+import com.bh.assign.base.api.ApiBase;
+import com.bh.assign.helper.APIConstants;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -19,22 +17,18 @@ import static org.junit.Assert.*;
 
 public class APIStepdef {
 
-    Response response= null;
-    private Runnable runnable;
-    private ValidatableResponse body;
+    Response response;
 
     @Given("user hit the uri apiEndpoint")
     public void user_hit_the_uri_api_endpoint() {
         // Write code here that turns the phrase above into concrete actions
-
         given().filter(new AllureRestAssured());
-//response=APICurdOp.getCallValidateStatus(APIEndPoints.poke_man_URI,"");
-        String uri=APICurdOp.getURI();
+        String uri = ApiBase.getURI();
         System.out.print("URI : " + uri + "\n");
-        response=APICurdOp.getCallValidateStatus(APICurdOp.getURI(),"");
-
-        System.out.println("getting response body from server -- "+response.body().asString());
+        response = ApiBase.getCallValidateStatus(ApiBase.getURI(), "");
+        System.out.println("getting response body from server -- " + response.body().asString());
     }
+
     @When("User provide header details and make GET call")
     public void user_provide_header_details_and_make_get_call() {
         // Write code here that turns the phrase above into concrete actions
@@ -45,46 +39,37 @@ public class APIStepdef {
     @Then("user will get status code {int} as respond code")
     public void user_will_get_status_code_as_respond_code(Integer expectedStatusCode) {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println( "getting response status code  -- "+response.getStatusCode());
-        response.then().assertThat().statusCode(expectedStatusCode) ;
+        System.out.println("getting response status code  -- " + response.getStatusCode());
+        response.then().assertThat().statusCode(expectedStatusCode);
     }
 
     //validate response matching fields
     @Then("Response matches the schema json {string} response")
     public void response_matches_the_schema_json_response(String field) {
         // Write code here that turns the phrase above into concrete actions
-        String responseBody=response.toString();
-        field= response.then().extract().path("forms.name").toString();
-        //GET operation
-        System.out.println("getting name field ..> " +field);
-assertEquals("[pikachu]",field);
+        field = response.then().extract().path("forms.name").toString();
+        System.out.println("getting name field ..> " + field);
+        assertEquals("[pikachu]", field);
     }
 
-// post call
+    // post call
     @When("User provide header details and make Post call")
     public void user_provide_header_details_and_make_post_call() {
         // Write code here that turns the phrase above into concrete actions
-//        JSONObject jsonBody = new JSONObject();
-//        jsonBody.put("username","admin");
-//        jsonBody.put("password","password123");
-        File jsonfile=new File("src/test/resources/util/Jsonfile/requestbodyherokuappbooking.json");
-
-//        response= APICurdOp.PostCallValidateStatus("https://restful-booker.herokuapp.com/auth",jsonBody);
-               response= APICurdOp.PostCallValidateStatus("https://restful-booker.herokuapp.com/booking",jsonfile,"");
-
-        System.out.println("getting response from post call-- > "+response.toString());
+        File jsonfile = new File("src/test/resources/util/Jsonfile/requestbodyherokuappbooking.json");
+        response = ApiBase.PostCallValidateStatus("https://restful-booker.herokuapp.com/booking", jsonfile, "");
+        System.out.println("getting response from post call-- > " + response.toString());
         response.then().assertThat().statusCode(200).log().all();
     }
 
     @When("User provide header details and make Put call")
     public void user_provide_header_details_and_make_put_call() {
         // Write code here that turns the phrase above into concrete actions
-       File jsonfile=new File("src/test/resources/util/Jsonfile/jsonplaceholderupdatebody.json");
-        response =APICurdOp.PutCallValidateStatus("https://jsonplaceholder.typicode.com/posts/1",jsonfile,"");
+        File jsonfile = new File("src/test/resources/util/Jsonfile/jsonplaceholderupdatebody.json");
+        response = ApiBase.PutCallValidateStatus("https://jsonplaceholder.typicode.com/posts/1", jsonfile, "");
         System.out.println("getting response ->> " + response.toString());
-
         response.then().assertThat().statusCode(200).log().all();
-        boolean b = APICurdOp.checkJsonHasKey("id", (Response) response);
+        boolean b = ApiBase.checkJsonHasKey("id", response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -92,11 +77,11 @@ assertEquals("[pikachu]",field);
     @When("User provide header details and make delete call")
     public void user_provide_header_details_and_make_delete_call() {
         // Write code here that turns the phrase above into concrete actions
-              response =APICurdOp.getCallValidateStatus("https://api.stripe.com/v1/customers","Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
-              String customerId=response.then().extract().path("data.id[0]");
-              System.out.println("customer id is ->> " +customerId);
-        response =APICurdOp.deleteCallValidateStatus("https://api.stripe.com/v1/customers/" +customerId,"Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
-       System.out.println("getting response ->> " +response.then().log().all().toString() +" getting status code --> " + response.getStatusCode());
+        response = ApiBase.getCallValidateStatus("https://api.stripe.com/v1/customers", "Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+        String customerId = response.then().extract().path("data.id[0]");
+        System.out.println("customer id is ->> " + customerId);
+        response = ApiBase.deleteCallValidateStatus("https://api.stripe.com/v1/customers/" + customerId, "Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+        System.out.println("getting response ->> " + response.then().log().all().toString() + " getting status code --> " + response.getStatusCode());
         response.then().assertThat().statusCode(200).log().all();
     }
 
@@ -107,7 +92,7 @@ assertEquals("[pikachu]",field);
         // Write code here that turns the phrase above into concrete actions
         response.then().assertThat().statusCode(200).log().all();
 
-        boolean b = APICurdOp.checkJsonHasKey("bookingid", (Response) response);
+        boolean b = ApiBase.checkJsonHasKey("bookingid", response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -115,45 +100,42 @@ assertEquals("[pikachu]",field);
     @Then("Response matches the schema json response")
     public void response_matches_the_schema_json_response() {
         // Write code here that turns the phrase above into concrete actions
-        String responseBody=response.toString();
         //Get JsonPath instance of above JSON string
-        JsonPath jsonPath = JsonPath.from(responseBody);
-        String lastname=response.then().extract().path("booking.lastname").toString();
-        String firstname=response.then().extract().path("booking.firstname").toString();
-
-//        String lastname=jsonPath.getString("booking.lastname");
-
-        System.out.println("getting name field ..> " +lastname);
-        assertEquals("Brown",lastname);
-        assertEquals("Jim",firstname);
+        String lastname = response.then().extract().path("booking.lastname").toString();
+        String firstname = response.then().extract().path("booking.firstname").toString();
+        System.out.println("getting name field ..> " + lastname);
+        assertEquals("Brown", lastname);
+        assertEquals("Jim", firstname);
     }
 
-// with scenario outline api call and schema,key,Status validation:
+// ** with scenario outline api call and schema,key,Status validation:
+    //**
 
     //Get call api to server
     @Given("user hit the {string} apiEndpoint with header details and make {string} call")
     public void user_hit_the_api_endpoint_with_header_details_and_make_call(String uri, String get) {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println("getting uri ->> " +uri);
-        response=APICurdOp.getCallValidateStatus(uri,"");
-        System.out.println("getting response body from server -- "+response.body().asString());
+        System.out.println("getting uri ->> " + uri);
+        response = ApiBase.getCallValidateStatus(uri, "");
+        System.out.println("getting response body from server -- " + response.body().asString());
     }
 
     //Post call api to server
     @Given("user hit the {string} apiEndpoint with header details and make Post call")
     public void user_hit_the_api_endpoint_with_header_details_and_make_post_call(String uri) {
         // Write code here that turns the phrase above into concrete actions
-        File jsonfile=new File("src/test/resources/util/Jsonfile/requestbodyherokuappbooking.json");
-        response= APICurdOp.PostCallValidateStatus(uri,jsonfile,"");
-        System.out.println("getting response from post call-- > "+response.toString());
+        File jsonfile = new File("src/test/resources/util/Jsonfile/requestbodyherokuappbooking.json");
+        response = ApiBase.PostCallValidateStatus(uri, jsonfile, "");
+        System.out.println("getting response from post call-- > " + response.toString());
 
     }
+
     //Put call api to server
     @Given("user hit the {string} apiEndpoint with header details and make Put call")
     public void user_hit_the_api_endpoint_with_header_details_and_make_put_call(String uri) {
         // Write code here that turns the phrase above into concrete actions
-        File jsonfile=new File("src/test/resources/util/Jsonfile/jsonplaceholderupdatebody.json");
-        response =APICurdOp.PutCallValidateStatus(uri,jsonfile,"");
+        File jsonfile = new File("src/test/resources/util/Jsonfile/jsonplaceholderupdatebody.json");
+        response = ApiBase.PutCallValidateStatus(uri, jsonfile, "");
         System.out.println("getting response ->> " + response.toString());
     }
 
@@ -162,13 +144,12 @@ assertEquals("[pikachu]",field);
     @Given("user hit the {string} apiEndpoint with header details and make delete call")
     public void user_hit_the_api_endpoint_with_header_details_and_make_delete_call(String uri) {
         // Write code here that turns the phrase above into concrete actions
-        response =APICurdOp.getCallValidateStatus(uri,"Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
-        String customerId=response.then().extract().path("data.id[0]");
-        System.out.println("customer id is ->> " +customerId);
-        System.out.println("endPoint is ->> " +uri+"/"+customerId);
-
-        response =APICurdOp.deleteCallValidateStatus(uri+"/"+customerId,"Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
-        System.out.println("getting response ->> " +response.then().log().all().toString() +" getting status code --> " + response.getStatusCode());
+        response = ApiBase.getCallValidateStatus(uri,APIConstants.BEARER +" sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+        String customerId = response.then().extract().path("data.id[0]");
+        System.out.println("customer id is ->> " + customerId);
+        System.out.println("endPoint is ->> " + uri + "/" + customerId);
+        response = ApiBase.deleteCallValidateStatus(uri + "/" + customerId, "Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc");
+        System.out.println("getting response ->> " + response.then().log().all().toString() + " getting status code --> " + response.getStatusCode());
         response.then().assertThat().statusCode(200).log().all();
     }
 
@@ -177,7 +158,7 @@ assertEquals("[pikachu]",field);
     public void response_has_the_json_in_response(String expectedKey) {
         // Write code here that turns the phrase above into concrete actions
         response.then().assertThat().statusCode(200).log().all();
-        boolean b = APICurdOp.checkJsonHasKey(expectedKey, (Response) response);
+        boolean b = ApiBase.checkJsonHasKey(expectedKey, response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -186,53 +167,34 @@ assertEquals("[pikachu]",field);
     @Then("Response matches the schema json {string}  with {string} in response")
     public void response_matches_the_schema_json_with_in_response(String expectedField, String expectedValue) {
         // Write code here that turns the phrase above into concrete actions
-        String responseBody=response.toString();
-        String actualValue1=response.then().extract().path(expectedField).toString();
-        String actualValue2=response.then().extract().path(expectedField).toString();
-
+        String actualValue1 = response.then().extract().path(expectedField).toString();
+        String actualValue2 = response.then().extract().path(expectedField).toString();
         //validation of schema response
-        System.out.println("getting name field ..> " +actualValue1);
-        assertEquals(actualValue1,expectedValue);
-        assertEquals(actualValue2,expectedValue);
+        System.out.println("getting name field ..> " + actualValue1);
+        assertEquals(actualValue1, expectedValue);
+        assertEquals(actualValue2, expectedValue);
     }
 
     // mulltiple response schema validation
     @Then("Response matches the schema json {string}  with {string} and {string}  with {string} in response")
     public void response_matches_the_schema_json_with_and_with_in_response(String expectedField1, String expectedValue1, String expectedField2, String expectedValue2) {
         // Write code here that turns the phrase above into concrete actions
-        String responseBody=response.toString();
-        String actualValue1=response.then().extract().path(expectedField1).toString();
-        String actualValue2=response.then().extract().path(expectedField2).toString();
-
+        String actualValue1 = response.then().extract().path(expectedField1).toString();
+        String actualValue2 = response.then().extract().path(expectedField2).toString();
         //validation of schema response
-        System.out.println("getting name field ..> value1 " +actualValue1 + " value2->> "+ actualValue2);
-        assertEquals(actualValue1,expectedValue1);
-        assertEquals(actualValue2,expectedValue2);
+        System.out.println("getting name field ..> value1 " + actualValue1 + " value2->> " + actualValue2);
+        assertEquals(actualValue1, expectedValue1);
+        assertEquals(actualValue2, expectedValue2);
     }
 // Step for calling uri with json file parameterised
 
     @Given("user hit the {string} and {string} apiEndpoint with header details and make Post call")
     public void user_hit_the_and_api_endpoint_with_header_details_and_make_post_call(String uri, String jsonFilepath) {
         // Write code here that turns the phrase above into concrete actions
-
-        response= APICurdOp.PostCallValidateStatus(uri, new File(jsonFilepath),"Basic QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw==");
-        System.out.println("getting response from post call-- > "+response.toString());
-    }
-
-    @When("User provide header details and make Post call for grant access token")
-    public void user_provide_header_details_and_make_post_call_for_grant_access_token() {
-        // Write code here that turns the phrase above into concrete actions
-
-        JSONObject jsonBody = new JSONObject();
-//        jsonBody.put("username","admin");
-//        jsonBody.put("password","password123");
-//        File jsonfile=new File("src/test/resources/util/Jsonfile/requestbodyherokuappbooking.json");
-
-        response= APICurdOp.PostCallValidateStatus("https://qa.30preprod.com/api/token?grant_type=client_credentials",jsonBody,"Basic QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw==");
-//        response= APICurdOp.PostCallValidateStatus("https://restful-booker.herokuapp.com/booking",jsonfile,"");
-
-        System.out.println("getting response from post call-- > "+response.toString());
-        response.then().assertThat().statusCode(200).log().all();
+        uri = ApiBase.getURI(APIConstants.fileBasePath+"IniFile/configuration.ini", uri);
+        System.out.println(uri);
+        response = ApiBase.PostCallValidateStatus(uri, new File(jsonFilepath), APIConstants.Basic+" QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw==");
+        System.out.println("getting response from post call-- > " + response.toString());
     }
 
 }

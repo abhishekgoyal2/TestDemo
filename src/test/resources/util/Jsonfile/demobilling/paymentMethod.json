@@ -1,0 +1,25 @@
+{
+  "lastFour" : "1234",
+  "tokenId" : "62a24d80-6172-4d72-abe7-dfae466e8df3",
+  "payorProfileId" : "78b853b4-b52b-4954-9945-733e0cb13bce",
+  "type" : "CREDIT_CARD",
+  "subType" : "CREDIT",
+  "brand" : "AMEX",
+  "expiryMonth" : "10",
+  "expiryYear" : 2030,
+  "alias" : "test",
+  "accountHolderName" : "payment method name",
+  "address" : {
+    "address1" : "test address1",
+    "address2" : "test address2",
+    "city" : "test city",
+    "countryCode" : "US",
+    "provinceCode" : "IL",
+    "postalCode" : "10010",
+    "provinceName" : "test province",
+    "region" : "test region"
+  },
+  "metadata" : {
+    "applicationReferenceId" : "b17d8a48-f025-45ff-bf66-8b2828a64c9f"
+  }
+}
