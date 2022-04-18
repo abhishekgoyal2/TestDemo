@@ -112,8 +112,9 @@ public class Paymentmethod {
         return type;
     }
 
-    public void setType(String type) {
+    public String setType(String type) {
         this.type = type;
+        return type;
     }
 
     public String getSubType() {
