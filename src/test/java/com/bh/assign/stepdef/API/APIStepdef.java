@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 public class APIStepdef {
 
-    Response response = null;
+    Response response;
 
     @Given("user hit the uri apiEndpoint")
     public void user_hit_the_uri_api_endpoint() {
@@ -69,7 +69,7 @@ public class APIStepdef {
         response = ApiBase.PutCallValidateStatus("https://jsonplaceholder.typicode.com/posts/1", jsonfile, "");
         System.out.println("getting response ->> " + response.toString());
         response.then().assertThat().statusCode(200).log().all();
-        boolean b = ApiBase.checkJsonHasKey("id", (Response) response);
+        boolean b = ApiBase.checkJsonHasKey("id", response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -92,7 +92,7 @@ public class APIStepdef {
         // Write code here that turns the phrase above into concrete actions
         response.then().assertThat().statusCode(200).log().all();
 
-        boolean b = ApiBase.checkJsonHasKey("bookingid", (Response) response);
+        boolean b = ApiBase.checkJsonHasKey("bookingid", response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -158,7 +158,7 @@ public class APIStepdef {
     public void response_has_the_json_in_response(String expectedKey) {
         // Write code here that turns the phrase above into concrete actions
         response.then().assertThat().statusCode(200).log().all();
-        boolean b = ApiBase.checkJsonHasKey(expectedKey, (Response) response);
+        boolean b = ApiBase.checkJsonHasKey(expectedKey, response);
         System.out.println("getting field boolean value->> " + b);
         assertTrue(b);
     }
@@ -195,16 +195,6 @@ public class APIStepdef {
         System.out.println(uri);
         response = ApiBase.PostCallValidateStatus(uri, new File(jsonFilepath), APIConstants.Basic+" QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw==");
         System.out.println("getting response from post call-- > " + response.toString());
-    }
-
-    @When("User provide header details and make Post call for grant access token")
-    public void user_provide_header_details_and_make_post_call_for_grant_access_token() {
-        // Write code here that turns the phrase above into concrete actions
-
-        JSONObject jsonBody = new JSONObject();
-        response = ApiBase.PostCallValidateStatus("https://qa.30preprod.com/api/token?grant_type=client_credentials", jsonBody, APIConstants.Basic+" QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw==");
-        System.out.println("getting response from post call-- > " + response.toString());
-        response.then().assertThat().statusCode(200).log().all();
     }
 
 }
