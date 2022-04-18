@@ -2,7 +2,6 @@
 package com.bh.assign.model;
 
 import javax.annotation.processing.Generated;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
