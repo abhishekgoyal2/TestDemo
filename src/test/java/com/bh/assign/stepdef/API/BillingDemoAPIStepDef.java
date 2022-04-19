@@ -2,6 +2,7 @@ package com.bh.assign.stepdef.API;
 
 import com.bh.assign.base.api.ApiBase;
 import com.bh.assign.helper.APIConstants;
+import com.bh.assign.helper.RandomGenrator;
 import com.bh.assign.model.Paymentmethod;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -100,6 +101,26 @@ public class BillingDemoAPIStepDef {
         response = ApiBase.PostCallValidateStatus("https://qa.30preprod.com/api/abcblg/payment-method",requestBody,authToken);
         System.out.println("getting response from -- > " + response.body().prettyPrint());
 
+    }
+
+    @When("User provide header details and make Post call to Create organization method with access provided and mandatory data")
+    public void user_provide_header_details_and_make_post_call_to_create_organization_method_with_access_provided_and_mandatory_data() throws IOException {
+        // Write code here that turns the phrase above into concrete actions
+        // Write code here that turns the phrase above into concrete actions
+        String authToken=APIConstants.BEARER+response.then().extract().path("access_token").toString();
+        RandomGenrator randomGenrator=new RandomGenrator();
+        System.out.println("getting access token " +authToken);
+        JSONObject requestBody=new JSONObject();
+        requestBody= randomGenrator.getRequestBody();
+        response = ApiBase.PostCallValidateStatus("https://qa.30preprod.com/api/organization",requestBody,authToken);
+        System.out.println("getting response from -- > " + response.body().prettyPrint());
+        try {
+            response.then().assertThat().statusCode(201).log().all();
+
+        } catch (Throwable e )
+        {
+            e.printStackTrace();
+        }
     }
 
     }

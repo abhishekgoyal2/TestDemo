@@ -48,3 +48,9 @@ Feature:Demo abc billing rest api test validation
 		When User provide header details and make Post call to Payment method with access provided and mandatory data
 			| type | subType      | brand |
 			| CREDIT_CARD  | CREDIT | AMEX |
+
+	@DemoBilling_post_PaymentMethodData1
+	Scenario: Send API requests of  type Post for Create organization method to server for Create organization method
+#	Given user hit the uri apiEndpoint
+		When User provide header details and make Post call for grant access token
+		When User provide header details and make Post call to Create organization method with access provided and mandatory data
